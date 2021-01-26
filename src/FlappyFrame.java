@@ -9,7 +9,7 @@ public class FlappyFrame extends JFrame {
 
         add(new FlappyPanel());
 
-        setSize(500,500);
+        setSize(500,500); 
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

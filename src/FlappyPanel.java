@@ -15,11 +15,10 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
     final int WALLWIDHT = 50;
     int flappyHeight = HEIGHT / 4;
     int flappyV = 0, flappyA = 8,flappyI=1; // velocity, Accelartion
-//    int [] wallx = new int [2]; // for the wall
-//    int [][] gapx = new int [2][2]; // for the gap between walls
+    int [] wallx = {WIDTH, WIDTH + WIDTH/2}; // for the wall
+    int [] gap ={(int)(Math.random()*HEIGHT),(int)(Math.random()*HEIGHT)}; // for the gap between walls
 
-    int wallx = WIDTH + 10;
-    int gap= (int)(Math.random()*HEIGHT);
+
     boolean gameOver = false;
 
 
@@ -40,6 +39,7 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
 
         if(!gameOver) {
             drawWall(g);
+            logic();
             drawFlappy(g);
         } else {
 
@@ -50,9 +50,11 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
 
     public void actionPerformed(ActionEvent e){   // ActionEvent = When the user clicks a button
 
+
         flappyA += flappyI;
         flappyV += flappyA;
-        wallx -= WALLXVELOCITY;
+        wallx[0] -= WALLXVELOCITY;
+        wallx[1] -= WALLXVELOCITY;
 
         repaint();
     }
@@ -60,21 +62,48 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
     private void drawFlappy(Graphics g){
         g.setColor(Color.BLUE);
 
-        if(!((flappyHeight + flappyV)>= gap && (flappyHeight+flappyV+25)<=gap+100
-        && (wallx <= 75)&& (wallx+WALLWIDHT >=75))) {
-              gameOver = true;
-        }
+        // Condition if we hit a wall we die
+
+
 
         g.fillRect(75,flappyHeight+flappyV,25,25);
     }
 
+    private void logic(){
+
+        for(int i=0; i<2; i++) {
+            if (wallx [i]<= 100 && wallx [i]+ WALLWIDHT >= 100) {
+                if ((flappyHeight + flappyV) >= 0 && (flappyHeight + flappyV) <= gap[i]
+                        || ((flappyHeight + flappyV + 25) >= gap [i]+ 100 && (flappyHeight + flappyV + 25) <= HEIGHT)) {
+                    gameOver = true;
+                }
+            }
+
+            if(wallx[i] + WALLWIDHT <=0){
+
+                wallx[i] = WIDTH;
+                gap[i] = (int)(Math.random()*(HEIGHT-150));
+
+            }
+        }
+
+
+
+
+
+    }
+
+
     private void drawWall(Graphics g){
-        g.setColor(Color.GRAY);
 
-        g.fillRect(wallx,0,WALLWIDHT,HEIGHT);
+        for(int i=0; i<2; i++) {
+            g.setColor(Color.GRAY);
 
-        g.setColor(Color.CYAN);
-        g.fillRect(wallx,gap,WALLWIDHT,100);
+            g.fillRect(wallx[i], 0, WALLWIDHT, HEIGHT);
+
+            g.setColor(Color.CYAN);
+            g.fillRect(wallx[i], gap[i], WALLWIDHT, 100);
+        }
 
 
     }

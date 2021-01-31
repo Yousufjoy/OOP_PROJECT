@@ -1,0 +1,89 @@
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class server {
+    String ScoreServer;
+
+    public String getScoreServer() {
+        return ScoreServer;
+    }
+
+    public server(String scoreServer) {
+        ScoreServer = scoreServer;
+    }
+
+    public static int getMax(int[] inputArray) {
+        int maxValue = inputArray[0];
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] > maxValue) {
+                maxValue = inputArray[i];
+            }
+        }
+        return maxValue;
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            ServerSocket serverSocket = new ServerSocket(5000);
+            Socket socket = serverSocket.accept();
+
+            OutputStreamWriter o = new OutputStreamWriter(socket.getOutputStream());
+            BufferedWriter writer = new BufferedWriter(o);
+
+            InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+            BufferedReader reader = new BufferedReader(isr);
+
+            ArrayList<server> sc = new ArrayList<server>();
+            String data;
+            try {
+                data = reader.readLine();
+                System.out.println(data);
+                FileWriter file = new FileWriter("score.txt", true);
+                BufferedWriter writer1 = new BufferedWriter(file);
+                BufferedWriter writer2 = new BufferedWriter(file);
+
+                writer1.append(data);
+                writer1.newLine();
+
+                writer1.close();
+                FileReader f = new FileReader("score.txt");
+                BufferedReader reader1 = new BufferedReader(f);
+
+                String line;
+                while ((line = reader1.readLine()) != null) {
+                    String[] parts = line.split(" ");
+                    String score = parts[0];
+
+                    server sco = new server(score);
+                    sc.add(sco);
+
+                }
+                sc.sort(new Comparator<server>() {
+                    @Override
+                    public int compare(server o1, server o2) {
+                        return o1.getScoreServer().compareTo(o2.getScoreServer());
+                    }
+                });
+                for(server i: sc){
+                    writer2.write(i.ScoreServer);
+                    writer2.newLine();
+                    writer2.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            writer.close();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+

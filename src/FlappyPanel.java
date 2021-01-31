@@ -15,12 +15,12 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
     final int WALLWIDHT = 50;
     int flappyHeight = HEIGHT / 4;
     int flappyV = 0, flappyA = 8,flappyI=1; // velocity, Accelartion
-    int score = 0;
+   public static int score = 0;
     int [] wallx = {WIDTH, WIDTH + WIDTH/2}; // for the wall
     int [] gap ={(int)(Math.random()*HEIGHT),(int)(Math.random()*HEIGHT)}; // for the gap between walls
 
 
-    boolean gameOver = false;
+    boolean gameOver = false; 
 
     Timer time = new Timer(40,this);
 
@@ -36,8 +36,8 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
        // new Timer(40,this).start();
     }
 
-    public void paintComponent(Graphics g){  // If we don't we gonna notice the square appearing everywhere
-        super.paintComponent(g);
+    public void paintComponent(Graphics g){ // this will creat the bird
+        super.paintComponent(g); // If we don't we gonna notice the square appearing everywhere
 
 
         if(!gameOver) {
@@ -101,8 +101,6 @@ public class FlappyPanel extends JPanel implements KeyListener, ActionListener{
 
             }
         }
-
-
 
     }
 
